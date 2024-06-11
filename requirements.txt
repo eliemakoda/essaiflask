@@ -1,0 +1,17 @@
+flask
+flask_sqlalchemy
+flask_login
+flask_bcrypt
+pandas
+fpdf
+scikit-learn
+xgboost
+lightgbm
+seaborn
+folium
+mysql-connector
+flask_wtf
+geopandas
+catboost
+mplcursors
+# flask_main
