@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css'>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="col-lg-1" style="padding-left: 2%;">
+                <a class="navbar-brand" href="landing.html">
+                    <img style="height: 70px; width: 90px;" src="../static/img/bfarlogo.png" alt="">
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <h1 style="font-size: 20px; margin: 0;">BFAR 4A</h1>
+                </div>
+                <div class="row">
+                    <p style="font-size: 15px; margin: 0;">Batangas Inland Fisheries Technology Outreach Station</p>
+                </div>
+            </div>
+            <div class="col-lg-8 d-flex justify-content-end" style="padding-right: 2%;">
+                <a class="btn btn-primary ms-lg-3" id="homeButton" href="#">Home</a>
+            </div>
+            
+        </div>
+    </nav>
+    <!--END OF NAVBAR-->
+
+    <div class="hero vh-100 d-flex align-items-center" id="home" style="background-image: url(../static/img/taallake.jpg);">
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="login-box">
+                <form action="/login" method="POST">
+                    <h2>Login</h2>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-user'></i></span>
+                        <input type="text" name = 'username' required>
+                        <label>Username</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-lock-alt' ></i></span>
+                        <input type="password" name='password' required>
+                        <label>Password</label>
+                    </div>
+                    <div class="remember-forgot">
+                        <!-- <label><input type="checkbox"> Remember me</label> -->
+                        <a href="#" data-toggle="modal" data-target="#forgotPasswordModal">Forgot Password?</a>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  <!-- Add this modal at the end of your HTML body -->
+  <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog"
+  aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <!-- Include the form for the "Forgot Password" functionality -->
+              <form method="post" action="{{ url_for('forgot_password') }}">
+
+                  <!-- Include necessary form fields (e.g., email) -->
+                  <div class="form-group">
+                      <label for="email">Email:</label>
+                      <input type="email" name="email" id="email" class="form-control" required>
+                  </div>
+                  
+                  <button type="submit" class="btn btn-primary">Reset Password</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Display flashed messages -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('homeButton').addEventListener('click', function() {
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>
+
+

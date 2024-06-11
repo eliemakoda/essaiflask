@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Taal Lake</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<!-- Custom fonts for this template-->
+<link href="static/css/all.min.css" rel="stylesheet" type="text/css">
+<link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link href="static/css/sb-admin-2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+</head>
+<body>  
+    <div id="wrapper">
+        <div class="container-fluid">
+            <div class="card shadow mb-4">
+                <div class="card-header py-4" style="background: linear-gradient(to top, #3D7C4D, #001a09);">
+                    <!-- <h6 class="m-0 font-weight-bold" style="color: #ffffff; font-size: 70px; text-align: center;">LAGUNA LAKE MAP</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #ffffff; font-size: 30px; text-align: center;">Water Quality Monitoring of Laguna de Bay</h6> -->
+                </div>
+                <div class="card-body">
+                    <div class="row" >
+                        <div class ="col-md-9">
+                            <div id="map" style = "height:850px; width:100%;border-style:solid; border-color: #000000;"></div>
+                        </div>
+                        
+
+                        <div class="col-md-3">
+                            <div class="form-group" style="text-align: center;">
+                                <h1 style="font-weight: bold; line-height: 1.5;">STUDY AREA</h1>
+                            </div>
+
+                            <div class="form-group" style="text-align: center;">
+                                <h3 style="font-size: 20px; line-height: 0.8;">Map of Taal Lake</h3>
+                                <h3 style="font-size: 20px; line-height: 0.5;">showing sampling sites</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <div style = "height:150px; width:100%;border-style:solid; border-color: #FFFFFF;">
+                                    <div class="row">
+                                        <div class ="col-md-7">
+                                            <img src="static/north.png" alt="Image Description" style="max-width: 100%; max-height: 100%; padding-left: 90px;">
+                                        </div>
+                                        <div class ="col-md-3">
+                                            <h3 style="font-size: 15px; line-height: 0.8; padding-top: 50px;">1:125,000</h3>
+                                            <h3 style="font-size: 15px; line-height: 0.8; padding-left: 5px">WGS 84</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div style = "height:120px; width:100%;border-style:solid;">
+                                    <h3 style="font-size: 25px; line-height: 1.2; text-align: center;">Legend</h3>
+                                    <h3 style="font-size: 15px; line-height: 0.8; padding-left: 15px;">
+                                        <span style="font-size: 18px; color: red;">&#9632;</span>   sampling sites
+                                    </h3>
+                                    <h3 style="font-size: 15px; line-height: 0.8; padding-left: 15px;">
+                                        <span style="font-size: 18px; color: #7ce9fd;">&#9632;</span>   Taal Lake
+                                    </h3>
+                                    <h3 style="font-size: 15px; line-height: 0.8; padding-left: 15px;">
+                                        <span style="font-size: 18px; color: #f1fdba;">&#9632;</span>   Municipal Boundary
+                                    </h3>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="text-align: center;">
+                                <div style = "height:422px; width:100%;border-style:solid;">
+                                    <img src="static/phil.png" alt="Image Description" style="max-width: 100%; max-height: 95%;">
+                                    <h3 style="font-size: 15px; line-height: 0.8; padding-left: 5px">Map by Ma. Lourdes D. Merilles</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+<!--==========================================================================================================================================-->
+
+    
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        var dataArray = []; // Declare the dataArray as a global variable
+        var geojson_data1 = JSON.parse('{{ geojson_data1|safe }}');
+
+        // Create a Leaflet map centered on the shapefile's bounding box center
+        var mapBounds1 = L.geoJSON(geojson_data1).getBounds();
+        var mapCenter = [mapBounds1.getCenter().lat, mapBounds1.getCenter().lng];
+
+        var map = L.map('map').setView(mapCenter, 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Create Leaflet GeoJSON layers for both shapefiles with custom style
+        var geojsonLayer1 = L.geoJSON(geojson_data1, {
+            style: {
+                fillColor: 'blue', // Set the fill color to blue
+                color: 'black', // Set the border color to black
+                weight: 1, // Set the border width to 1
+                opacity: 1, // Set the border opacity to 1
+                fillOpacity: 0.2 // Set the fill opacity to 0.2 (20% transparency)
+            }
+        }).addTo(map);
+
+        
+
+        // Create latitude pins as markers and add them to the map
+        var latitudePins = [
+            { coordinates: [13.960427097650134, 121.1145482751536], name: 'Mataas na Kahoy' },//1
+            { coordinates: [13.9525959052652, 120.92609306647753], name: 'Agoncillo'},//2
+            { coordinates: [14.067116632318964, 120.9304048228642], name: 'Laurel' },//3
+            { coordinates: [14.145132074933167, 121.01922121441443], name: 'Talisay' },//4
+            { coordinates: [14.107798507455575, 121.12049021559298], name: 'Tanauan' }//5
+        ];
+
+        
+
+        var markers = [];
+        for (var i = 0; i < latitudePins.length; i++) {
+            var marker = L.marker(latitudePins[i].coordinates).addTo(map);
+            marker.index = i; // Store the pin index in the marker object
+            markers.push(marker);
+        }
+
+        var selectedPinIndex = -1; // Initialize to -1 to indicate no pin is selected
+
+     
+
+        // Function to zoom to the specified pin
+       // Your code for initializing the map, markers, and other setup
+
+        // Function to zoom to the specified pin
+        function zoomToPin(index) {
+            if (index >= 0) {
+                var latlng = latitudePins[index].coordinates;
+                map.setView(latlng, 14); // Adjust the zoom level as needed
+                showData(latitudePins[index].name);
+            }
+        }
+
+        // Bind click event for each pin marker
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].on('click', function (e) {
+                var clickedMarker = e.target;
+                var index = clickedMarker.index;
+                zoomToPin(index);
+            });
+        }
+
+        // Function to show all pins with full opacity when the page loads
+        function showAllPins() {
+            selectedPinIndex = -1;
+            setPinOpacity();
+            map.fitBounds(bounds); // Fit the map to show all pins
+            showData('-1');
+        }
+
+        // Call the showAllPins function when the page loads
+        showAllPins();
+
+
+        // Function to set the opacity of all pins based on the selected pin index
+        function setPinOpacity() {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setOpacity(selectedPinIndex === -1 || i === selectedPinIndex ? 1 : 1);
+            }
+            // Update the dropdown value to match the selected pin
+            document.getElementById('pinDropdown').value = selectedPinIndex;
+        }
+
+        // Function to handle the click event on a pin
+        function pinClickHandler(index) {
+            selectedPinIndex = index;
+            setPinOpacity();
+            var latlng = latitudePins[selectedPinIndex].coordinates;
+            var zoomLevel = 14;
+            map.setView(latlng, zoomLevel); // Zoom to level 14 when the pin is clicked
+            showData(latitudePins[selectedPinIndex].name);
+        }
+
+        // Bind click event for each pin marker
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].on('click', function (e) {
+                pinClickHandler(e.target.index);
+            });
+        }
+
+        // Show all pins with full opacity when the page loads
+        setPinOpacity();
+
+    </script>
+</body>
+</html>

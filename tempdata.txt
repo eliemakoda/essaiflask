@@ -1,0 +1,134 @@
+
+class WaterQuality(db.Model):
+    __tablename__ = 'taaltb'
+    id = db.Column(db.Integer, primary_key=True)
+    stationid = db.Column(db.String(225))
+    Barangay = db.Column(db.String(255))
+    Month = db.Column(db.String(255))
+    Year = db.Column(db.String(255))
+    pH = db.Column(db.String(255))
+    Ammonia = db.Column(db.String(255))
+    DO = db.Column(db.String(255))
+    Nitrate = db.Column(db.String(255))
+    Phosphate = db.Column(db.String(255))
+
+@app.route('/save_to_database', methods=['POST'])
+def save_to_database():
+    if request.method == 'POST':
+        print("Received a POST request to save data.")  # Add a debug message
+
+        try:
+            # Retrieve data from the form
+            stationid = request.form.get('station_id')  # Replace this with the actual value
+            barangay = request.form.get('Barangay')
+            month = request.form.get('Month')
+            year = request.form.get('Year')
+            ph = request.form.get('pH')
+            ammonia = request.form.get('Ammonia')
+            do = request.form.get('DO')
+            nitrate = request.form.get('Nitrate')
+            phosphate = request.form.get('Phosphate')
+
+            # Create a new WaterQuality object and assign values
+            water_quality = WaterQuality(
+                stationid=stationid,
+                Barangay=barangay,
+                Month=month,
+                Year=year,
+                pH=ph,
+                Ammonia=ammonia,
+                DO=do,
+                Nitrate=nitrate,
+                Phosphate=phosphate
+            )
+
+            # Add the object to the session and commit the changes
+            db.session.add(water_quality)
+            db.session.commit()
+
+            print("Data saved successfully.")  # Add a success message
+
+            # Redirect to a different route (change 'route_name' to your desired route)
+            return redirect(url_for('route_name'))
+        except Exception as e:
+            # Handle the error, log it, or return an error response
+            print("Error:", str(e))
+            #db.session.rollback()  # Rollback the transaction
+            return jsonify({"message": "Error occurred while saving data", "status": "error"})
+    else:
+        print("Received a non-POST request to save_to_database.")  # Add a debug message for non-POST requests
+
+        # You can return an error response here if needed
+        return jsonify({"message": "Invalid request method", "status": "error"})
+
+
+
+<script>
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        // Close the modal (assuming your modal has the id "myModal")
+        var modal = document.getElementById("save_to_database");
+        modal.style.display = "none";
+
+        // Display the alert message
+        alert("Data saved successfully!");
+
+        // Redirect to the index page
+        window.location.href = "/";
+    });
+</script>
+
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-
+
+filtered_river_data = WaterQuality.query.filter(
+        WaterQuality.Month.in_(['January', 'February', 'March']),  # Use the actual values from your database
+        WaterQuality.Year == int(selected_year)
+    ).all()
+
+    data_from_db = pd.DataFrame([{
+        'stationid' : row.stationid,
+        'Barangay' : row.Barangay,
+        'Month': row.Month,
+        'Year': float(row.Year),
+        'pH': float(row.pH),
+        'Ammonia': float(row.Ammonia),
+        'DO': float(row.DO),
+        'Nitrate': float(row.Nitrate),
+        'Phosphate': float(row.Phosphate)
+    } for row in filtered_river_data])
+    data_from_db = calculate_wqi(data_from_db)
+    #print(data_from_db)
+    #filtered_river_df = pd.concat([data_from_db, filtered_river_df], ignore_index=True)
+
+
+
+
+
+    
+    filtered_river_data = WaterQuality.query.filter(
+        WaterQuality.Month.in_(selected_months),  # Use the actual values from your database
+        WaterQuality.Year == int(selected_year)
+    ).all()
+    data_from_db = pd.DataFrame([{
+        'stationid' : row.stationid,
+        'Barangay' : row.Barangay,
+        'Month': row.Month,
+        'Year': float(row.Year),
+        'pH': float(row.pH),
+        'Ammonia': float(row.Ammonia),
+        'DO': float(row.DO),
+        'Nitrate': float(row.Nitrate),
+        'Phosphate': float(row.Phosphate)
+    } for row in filtered_river_data])
+    data_from_db = calculate_wqi(data_from_db)
+    #print(data_from_db)
+    print("filtered_river_df:")
+    #print(filtered_river_df)
+
+    print("data_from_db:")
+    #print(data_from_db)
+
+    #filtered_river_df = pd.concat([data_from_db, filtered_river_df], ignore_index=True)

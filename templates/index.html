@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css'>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Taal Lake</title>
+</head>
+
+<body>
+
+    <!--NAV BAR-->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="col-lg-1" style="padding-left: 2%;">
+                <a class="navbar-brand" href="#">
+                    <img style="height: 70px; width: 90px;" src="../static/img/bfarlogo.png" alt="">
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <h1 style="font-size: 20px; margin: 0;">BFAR 4A</h1>
+                </div>
+                <div class="row">
+                    <p style="font-size: 15px; margin: 0;">Batangas Inland Fisheries Technology Outreach Station</p>
+                </div>
+            </div>
+            <div class="col-lg-8" style="padding-right: 2%;">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#announcement">Announcements</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#activities">Activities</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#programs">Programs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#gis">GIS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#charts">Charts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">Abouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contacts">Contacts</a>
+                        </li>
+                    </ul>
+                    <a class="btn btn-primary ms-lg-3" href="{{ url_for('loginpage') }}">Log in</a>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+    <!--END OF NAVBAR-->
+
+
+    <!-- HERO -->
+    <div class="hero vh-100 d-flex align-items-center" id="home"
+        style="background-image: url(../static/img/taalbg.jpg);">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto text-center">
+                    <h1 class="text-white" style="font-size: 100px;">BFAR CALABARZON</h1>
+                    <h1 class="text-white" style="font-size: 50px;">BATANGAS INLAND FISHERIES TECHNOLOGY OUTREACH (BIFTOS)</h1>
+                    <p class="text-white my-3">"Tagapagtaguyod ng Malinis at Masaganag Karagatan"</p>
+                    <a href="#wqa" class="btn me-3 btn-primary">Water Quality Assessment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END OF HERO-->
+
+    <!--ANNOUNCEMENT-->
+    <section id="announcement" class="border border-secondary-subtle">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-8 mx-auto text-center">
+                    <h1>Announcements</h1>
+                </div>
+            </div>
+            <div class="row g-3">
+                {% for announcement in announcements %}
+                <div class="col-lg-4 col-lg-6">
+                    <div class="project">
+                        <img src="{{ announcement.announcement_image }}" alt="">
+                        <div class="overlay">
+                            <div>
+                                <h4 class="text-white">{{ announcement.title }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!--END OF ANNOUNCEMENT-->
+
+    <!--ACTIVITIES-->
+    <section id="activities" class="border border-secondary-subtle">
+        <div class="container-fluid">
+            <div class="row mb-5">
+                <div class="col-md-8 mx-auto text-center">
+                    <h6 class="text-primary">ACTIVITIES</h6>
+                    <h1>Our Recent Activities</h1>
+                </div>
+            </div>
+            <div class="row g-3">
+                {% for activity in activities %}
+                <div class="col-lg-4 col-sm-6">
+                    <div class="project">
+                        <img src="{{ activity.activity_image }}" alt="">
+                        <div class="overlay">
+                            <div>
+                                <h4 class="text-white">{{ activity.title }}</h4>
+                                <p class="text-white">{{ activity.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!--END OF ACTIVITIES-->
+
+    <!--PROGRAMS-->
+    <section id="programs" class="border border-secondary-subtle">
+        <div class="container-fluid">
+            <div class="row mb-5">
+                <div class="col-md-8 mx-auto text-center">
+                    <!-- <h6 class="text-primary">ACTIVITIES</h6> -->
+                    <h1>PROGRAMS</h1>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <embed src="../static/pdf/BASIL-PPT.pdf" type="application/pdf" width="100%" height="1000px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--END OF PROGRAMS-->
+    
+    <!--SERVICES-->
+    <section id="services" class="border border-secondary-subtle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto text-center">
+                    <h6 class="text-primary">SERVICES</h6>
+                    <h1>Our Services</h1>
+                    <p>BFAR Station assigned on water quality monitoring of Taal Lake and ornamental fish production</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <!-- Display services dynamically -->
+                {% for service in services %}
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service card-effect">
+                        <div class="iconbox">
+                            <i class="bx bxs-comment-detail"></i>
+                        </div>
+                        <h5 class="mt-4 mb-2">{{ service.title }}</h5>
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!--END OF SERVICES-->
+
+    <!--GIS-->
+    <section class="row w-100 py-0 bg-light border border-secondary-subtle" id="gis">
+        <!-- <div class="col-lg-6 col-img" style="background-image: url(../static/img/taalmap.png);"></div>
+        <div class="col-lg-6 col-img" id="map" style="border-style:solid; border-color: #000000;"></div>-->
+        <div  class="col-lg-6 col-img"  style="border-style:solid; border-color: #000000;" id="heatmap-container">
+            <!--<div class='row'>
+                <div class="col-md-4">
+                <div class="dropdown" id="month-dropdown">
+                    <div class="select">
+                        <span class="selected">January</span>
+                        <div class="caret"></div>
+                    </div>
+                    <ul class="menu">
+                        <li class="active">January</li>
+                        <li>February</li>
+                        <li>March</li>
+                        <li>April</li>
+                        <li>May</li>
+                        <li>June</li>
+                        <li>July</li>
+                        <li>August</li>
+                        <li>September</li>
+                        <li>October</li>
+                        <li>November</li>
+                        <li>December</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dropdown" id="year-dropdown">
+                    <div class="select">
+                        <span class="selected">2018</span>
+                        <div class="caret"></div>
+                    </div>
+                    <ul class="menu">
+                        <li class="active">2018</li>
+                        <li>2019</li>
+                        <li>2020</li>
+                        <li>2021</li>
+                        <li>2022</li>
+                        <li>2023</li>
+                        <li>2024</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-4 d-flex align-items-center justify-content-end">
+                <button class="btn p-3 text-white" onclick="applyFilter()" style="background: #001c50;">Apply Filter</button>
+            </div>
+      
+            
+           </div>   -->
+            <iframe id="heatmap-iframe" src="data:text/html;base64,{{ heatmap }}" width="100%" height="805px"></iframe>
+        </div>
+        <div class="col-lg-6 py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-primary">TAAL LAKE GIS</h1>
+                        <!--<h1>Best solution for your business</h1>--><BR>
+                        <p class="fs-5">Taal Lake is located in the southern part of Luzon, specifically in the province of Batangas. Situated around 60 kilometers south of Manila, this region is comprised of nine municipalities and two cities, with a total of 287 barangays. The lake serves as a crucial economic resource for the majority of locals, with fishing being a predominant employment within the village. The lake's fishing sector supports around 20,000 individuals in their means of living. This resource serves several functions, including aquaculture, recreation, tourism, navigation, and supplying water for Tagaytay. The lake's prestigious reputation is due to its ecosystem, which supports both freshwater and saltwater aquatic creatures. The research focused on five (5) fishing site stations and nine (9) barangays Talisay (Sampaloc, Quiling, San Isidro), Laurel (Buso-Buso, Leviste), Agoncillo ( Bañaga, Manalaw), Mataas na Kahoy, Tanauan ;  that were monitored by BFAR4A-BIFTOS from January 2018 to March 2024.</p>
+
+                    <!--    <div class="feature d-flex mt-5">
+                            <div class="iconbox me-3">
+                                <i class="bx bxs-comment-edit"></i>
+                            </div>
+                            <div>
+                                <h5>Feature</h5>
+                                <p>Lorem ipsum dolor sit amet, concestetur adipisicing elit. Nihil perspiciatis illo</p>
+                            </div>
+                        </div>
+                        <div class="feature d-flex mt-5">
+                            <div class="iconbox me-3">
+                                <i class="bx bxs-user-circle"></i>
+                            </div>
+                            <div>
+                                <h5>Feature</h5>
+                                <p>Lorem ipsum dolor sit amet, concestetur adipisicing elit. Nihil perspiciatis illo</p>
+                            </div>
+                        </div>
+                        <div class="feature d-flex mt-5">
+                            <div class="iconbox me-3">
+                                <i class="bx bxs-download"></i>
+                            </div>
+                            <div>
+                                <h5>Feature</h5>
+                                <p>Lorem ipsum dolor sit amet, concestetur adipisicing elit. Nihil perspiciatis illo</p>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--END OF GIS-->
+
+    <!--WQA-->
+    <section id="wqa" class="border border-secondary-subtle">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-8 mx-auto text-center">
+                    <h1>Water Quality Assessments</h1>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group" style="text-align: center;">
+                                <label class="m-0 font-weight-bold" style="color: #001c50; font-size: 17px;">Search by Barangay:</label>
+                                <select id="barangayDropdown" onchange="filterData()" class="w-100"
+                                    style="height: 40px; width: 10px; border-radius: 7px; " data-live-search="true">
+                                    <option value="">All</option>
+                                    <option value="Ambulong">Ambulong</option>
+                                    <option value="Bañaga">Bañaga</option>
+                                    <option value="Berinayan">Berinayan</option>
+                                    <option value="Buso-Buso">Buso-Buso</option>
+                                    <option value="Leviste">Leviste</option>
+                                    <option value="Manalao">Manalaw</option>
+                                    <option value="Mataas na Kahoy">Mataas na Kahoy</option>
+                                    <option value="Nangkaan">Nangkaan</option>
+                                    <option value="Pulang Bato">Pulang Bato</option>
+                                    <option value="Quiling">Quiling</option>
+                                    <option value="Sampaloc">Sampaloc</option>
+                                    <option value="San Isidro">San Isidro</option>
+                                    <option value="San Nicolas">San Nicolas</option>
+                                    <option value="Tanauan">Tanauan</option>
+                                    <option value="Talisay">Talisay</option>
+                                </select>
+                            </div>
+                        </div>
+            
+                        <div class="col-md-4">
+                            <div class="form-group" style="text-align: center;">
+                                <label class="m-0 font-weight-bold" style="color: #001c50; font-size: 17px;"
+                                    for="yearDropdown">Select Year:</label>
+                                <select id="yearDropdown" onchange="filterData()" class="w-100"
+                                    style="height: 40px; width: 10px; border-radius: 7px; " data-live-search="true">
+                                    <option value="">All</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                </select>
+                            </div>
+                        </div>
+            
+                        <div class="col-md-4">
+                            <div class="form-group" style="text-align: center;">
+                                <label class="m-0 font-weight-bold" style="color: #001c50; font-size: 17px;">Select Month:</label>
+                                <select id="monthDropdown" onchange="filterData()" class="w-100"
+                                    style="height: 40px; border-radius: 7px; " data-live-search="true">
+                                    <option value="">All</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border border-black" id="tableContainer" style="height: 700px; overflow-y: auto;">
+                <div class="table-responsive"><!-- POINT -->
+                    <table id="dataTable" class = "table table-bordered" width="100%">
+                        <thead class="text-black">
+                            <tr>
+                                <td>Station ID</td>
+                                <td>Barangay</td>
+                                <td>Month</td>
+                                <td>Year</td>
+                                <td>pH</td>
+                                <td>Ammonia</td>
+                                <td>DO</td>
+                                <td>Nitrate</td>
+                                <td>Phosphate</td>
+                                <td>WQI</td>
+                                <td>WQC</td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--END OF WQA-->
+
+    <section id="charts" class="border border-secondary-subtle">
+        <div class="container">
+           <!--<div class = "row">
+                <div class = "text-center">
+                    <h1 style="font-size: 30px;">TAAL LAKE CHART/REPORT (WAWQI)</h1>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-3">
+                            <div class="dropdown" id="month-dropdown">
+                                <div class="select">
+                                    <span class="selected">January</span>
+                                    <div class="caret"></div>
+                                </div>
+                                <ul class="menu">
+                                    <li class="active">January</li>
+                                    <li>February</li>
+                                    <li>March</li>
+                                    <li>April</li>
+                                    <li>May</li>
+                                    <li>June</li>
+                                    <li>July</li>
+                                    <li>August</li>
+                                    <li>September</li>
+                                    <li>October</li>
+                                    <li>November</li>
+                                    <li>December</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="dropdown" id="year-dropdown">
+                                <div class="select">
+                                    <span class="selected">2018</span>
+                                    <div class="caret"></div>
+                                </div>
+                                <ul class="menu">
+                                    <li class="active">2018</li>
+                                    <li>2019</li>
+                                    <li>2020</li>
+                                    <li>2021</li>
+                                    <li>2022</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="col">
+                            <div class="chart">
+                                 <img id="dao-chart-image" src="{{ dao_plot_path }}" alt="Bar Chart"> 
+                                <img class="responsive-chart" id="chart-image" src="{{ plot_path }}" alt="Bar Chart">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="row p-5">
+                <div class = "text-center">
+                    <h1 style="font-size: 30px;">TAAL LAKE CHART/REPORT</h1><!--  (DAO 2016-08)-->
+                    <div class="row d-flex justify-content-center">
+                        <!--<div class="col-md-3">
+                            <div class="dropdown" id="dao-month-dropdown">
+                                <div class="select">
+                                    <span class="selected">January</span>
+                                    <div class="caret"></div>
+                                </div>
+                                <ul class="menu">
+                                    <li class="active">January</li>
+                                    <li>February</li>
+                                    <li>March</li>
+                                    <li>April</li>
+                                    <li>May</li>
+                                    <li>June</li>
+                                    <li>July</li>
+                                    <li>August</li>
+                                    <li>September</li>
+                                    <li>October</li>
+                                    <li>November</li>
+                                    <li>December</li>
+                                </ul>
+                            </div>
+                        </div> -->
+                        <div class="col-md-6">
+                            <div class="dropdown" id="dao-year-dropdown">
+                                <div class="select">
+                                    <span class="selected">All</span>
+                                    <div class="caret"></div>
+                                </div>
+                                <ul class="menu">
+                                    <li class="active">All</li>
+                                    <li>2018</li>
+                                    <li>2019</li>
+                                    <li>2020</li>
+                                    <li>2021</li>
+                                    <li>2022</li>
+                                    <li>2023</li>
+                                    <li>2024</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                    </div>
+    
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="col">
+                            <div class="chart">
+                                <!-- <img id="dao-chart-image" src="{{ dao_plot_path }}" alt="Bar Chart"> -->
+                                <img class="responsive-chart" id="chart-image1" src="{{ plot_path1 }}" alt="Bar Chart">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+        
+                  <!--CHART-->
+        
+            
+    
+        <!--CHART FOR WAWQI-->
+        <div class="row">   
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col mx-auto text-center">
+                        <h1 id="chart-title-dao" style="font-size: 30px;">LAGUNA LAKE CHART/REPORT (DAO 2016)</h1>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-3">
+                                <div class="dropdown" id="dao-month-dropdown1">
+                                    <div class="select">
+                                        <span class="selected">January</span>
+                                        <div class="caret"></div>
+                                    </div>
+                                    <ul class="menu">
+                                        <li class="active">January</li>
+                                        <li>February</li>
+                                        <li>March</li>
+                                        <li>April</li>
+                                        <li>May</li>
+                                        <li>June</li>
+                                        <li>July</li>
+                                        <li>August</li>
+                                        <li>Septembet</li>
+                                        <li>October</li>
+                                        <li>November</li>
+                                        <li>December</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="dropdown" id="dao-year-dropdown1">
+                                    <div class="select">
+                                        <span class="selected">2018</span>
+                                        <div class="caret"></div>
+                                    </div>
+                                    <ul class="menu">
+                                        <li  class="active">2018</li>
+                                        <li>2019</li>
+                                        <li>2020</li>
+                                        <li>2021</li>
+                                        <li>2022</li>
+                                        <li>2023</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col">
+                                <div class="chart">
+                                    <img id="chart-image-dao1" src="{{ plot_path }}" alt="Bar Chart">
+                                    
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="col">
+                                    <div class="chart">
+                                        <canvas id="doughnut" width="300" height="300"></canvas>
+                                    </div>
+                                </div> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END OF CHART-->
+        </div>
+    </section>
+    <!--END OF CHART-->
+    
+    
+        </section>
+
+    <!--ABOUT-->
+    <section id="about" class="border border-secondary-subtle" style="background-image: url(../static/img/top-view.png); background-size: cover; background-position: center; background-attachment: fixed;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto text-center">
+                    <!-- <h6 class="text-primary">ABOUT</h6> -->
+                    <h1 class="text-white">ABOUT US</h1>
+                </div>
+
+            </div>
+            <div class="row" style="padding-top: 20px;">
+                <div class="mx-auto text-center">
+                    <div class="card" style="min-height: 270px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background:transparent">
+                        <div class="card-body" style="padding-left: 150px; padding-right: 150px;">
+                            <div class="org">
+                                <img src="../static/img/orgchart.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 40px;">
+                <div class="col-md-4 mx-auto text-center">
+                    <div class="card text-white" style="min-height: 270px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: rgba(0, 0, 0, 0.7);">
+                        <div class="card-body">
+                            <h4 class="text-primary">VISION</h4>
+                            <p>BIFTOS shall be the prime mover for the adoption of aquaculture projects and development through sound and technologically updated management practices to ensure sustainability, productivity, conservation and food security.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mx-auto text-center">
+                    <div class="card text-white" style="min-height: 270px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: rgba(0, 0, 0, 0.7);">
+                        <div class="card-body">
+                            <h4 class="text-primary">MISSION</h4>
+                            <p>To promote sustainable production, protection and conservation of water resources through water quality monitoring and enhance livelihood by improving aquaculture technology.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mx-auto text-center">
+                    <div class="card text-white" style="min-height: 270px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: rgba(0, 0, 0, 0.7);">
+                        <div class="card-body">
+                            <h4 class="text-primary">GOALS</h4>
+                            <p>To promote sustainable aquaculture and provide fisheries technology among the fisherfolk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 20px;">
+                <div class="col-md-6 mx-auto text-center">
+                    <div class="card text-white" style="min-height: 470px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: rgba(0, 0, 0, 0.7);">
+                        <div class="card-body" style="text-align: left;">
+                            <h4 class="text-primary text-center">FUNCTIONS</h4>
+                            <p style="font-weight: 700;">The specific functions of BFAR-BIFTOS are enumerated below:</p>
+                            <p>1. Provides livelihood projects to fisherfolk;</p>
+                            <p>2. Monitors water quality and health status of Taal Lake;</p>
+                            <p>3. Issues advisory on the status/updates of water quality;</p>
+                            <p>4. Coordinates with the LGUs, FARMC, Fisherfolk Associations, and fish cage operators on aquaculture project and development;</p>
+                            <p>5. Provides training on the culture/management of freshwater ornamental fish and GAqP; and</p>
+                            <p>6. Provides technical advice/assistance to aquaculture project and related problems on fish health management.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mx-auto text-center">
+                    <div class="card text-white" style="min-height: 470px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: rgba(0, 0, 0, 0.7);">
+                        <div class="card-body" style="text-align: left;">
+                            <h4 class="text-primary text-center">SERVICES AND FUNCTIONS</h4>
+                            <p style="padding-top: 20px;">- Water Quality Assessment and Fish Kill Investigation</p>
+                            <p>- Fish Health and Disease Diagnosis</p>
+                            <p>- Fishpond Management</p>
+                            <p>- Breeding and Culture of Ornamental Fish</p>
+                            <p>- Ornamental Fish Distribution</p>
+                            <p>- Research concerning Taal Lake Fisheries</p>
+                            <p>- Support to Protected Area Management Board (PAMB) Activities and Interventions in Taal Lake</p>
+                            <p>- Technical Assistance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 20px;">
+                <div class="mx-auto text-center">
+                    <div class="card text-white" style="min-height: 270px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: rgba(0, 0, 0, 0.7);">
+                        <div class="card-body" style="padding-left: 150px; padding-right: 150px;">
+                            <h4 class="text-primary">HISTORY</h4>
+                            <p style="padding-top: 20px;">The Batangas Inland Fisheries Technology Outreach Station, originally known as the Inland Fisheries Research Station (IFRS), was established in 1983 at Aya, a coastal barangay in Talisay, Batangas. It was known as the Regional Facility/Station of Department of Agriculture (DA)-Bureau of Fisheries and Aquatic Resources (BFAR) Region 4-A for Taal Lake until 1994, when super typhoon Rosing destroyed the office.</p>
+                            <p>Three years later, a new structure known as the IFRS was rebuilt, and during that time, BFAR staff sought refuge at the Tanauan School of Fisheries (TSF) at Ambulong, Tanauan, Batangas.</p>
+                            <p>In 1997, DA-BFAR signed a Memorandum of Agreement (MOA) with Tanauan School of Fisheries (TSF), granting a 115-square-meter property for the building of an IFRS office and a 3,600-square-foot lot. meter fishpond within the school grounds located at Brgy. Ambulong, Tanauan City, Batangas. The grant of this establishment is for experiment and research purposes. Moreover, the fish health laboratory was established for the ecological monitoring of Taal Lake water quality.</p>
+                            <p>In 2004, it became Inland Fisheries Technology Outreach Station or IFTOS. Under DA Special-Order No. 17, Batangas was added to its name making it ‘Batangas Inland Fisheries Technology Outreach Station or BIFTOS in mid-2018.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--END OF ABOUT-->
+
+    <!--CONTACTS-->
+    <section id="contacts" class="bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-8 mx-auto text-center">
+                    <h6 class="text-primary">CONTACTS</h6>
+                    <h1>Contact Info</h1>
+                </div>
+            </div>
+            {% for contact in contacts %}
+            <div class="row mb-5">
+                <div class="col-md-4 text-center">
+                    <h4 class="text-primary"><i class='bx bxs-building-house'></i> Address</h4>
+                    <h5>{{ contact.brgy }}, {{ contact.municipality }}, {{ contact.province }}, {{ contact.zip_code }}</h5>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h3 class="text-primary"><i class='bx bx-mobile'></i> Mobile</h3>
+                    <h5>{{ contact.mobile }}</h5>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h3 class="text-primary"><i class='bx bx-envelope'></i> Email Address</h3>
+                    <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="card bg-transparent">
+                <div class="card-body" style="padding-top: 50px; padding-bottom: 50px;">
+                    <div class="row mb-5">
+                        <div class="col-md-8 mx-auto text-center">
+                            <h1>Get In Touch</h1>
+                        </div>
+                    </div>
+
+                    <form method="post" action="{{ url_for('send_email') }}" class="row g-3 justify-content-center">
+                        <div class="col-md-5">
+                            <input type="text" name="full_name" id="full_name" class="form-control" placeholder="Full Name">
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" name="email" id="email" class="form-control" placeholder="Enter E-mail">
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="subject" id="subject"class="form-control" placeholder="Enter Subject">
+                        </div>
+                        <div class="col-md-10">
+                            <textarea name="message" id="message" cols="30" rows="5" class="form-control"
+                                placeholder="Enter Message"></textarea>
+                        </div>
+                        <div class="col-md-10 d-grid">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!--END OF CONTACTS-->
+
+    <footer>
+        <div class="footer-top">
+            <div class="container d-flex justify-content-center align-items-center">
+                <div class="col-lg-1" style="padding-left: 2%;">
+                    <a class="navbar-brand" href="#">
+                        <img style="height: 50px; width: 65px;" src="../static/img/bfarlogo.png" alt="">
+                    </a>
+                </div>
+                <div class="col-lg-2">
+                    <div class="row">
+                        <h7 class="text-white">© BFAR-BIFTOS 2024</h7>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+
+    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- <script src="../static/js/chart1.js"></script> -->
+    <!-- <script src="./js/chart2.js"></script> -->
+    <script src="../static/js/dropdown.js"></script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>    
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script>
+        var dataArray = []; // Declare the dataArray as a global variable
+        var geojson_data1 = JSON.parse('{{ geojson_data1|safe }}');
+
+        // Create a Leaflet map centered on the shapefile's bounding box center
+        var mapBounds1 = L.geoJSON(geojson_data1).getBounds();
+        var mapCenter = [mapBounds1.getCenter().lat, mapBounds1.getCenter().lng];
+
+        var map = L.map('map').setView(mapCenter, 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Create Leaflet GeoJSON layers for both shapefiles with custom style
+        var geojsonLayer1 = L.geoJSON(geojson_data1, {
+            style: {
+                fillColor: 'blue', // Set the fill color to blue
+                color: 'black', // Set the border color to black
+                weight: 1, // Set the border width to 1
+                opacity: 1, // Set the border opacity to 1
+                fillOpacity: 0.2 // Set the fill opacity to 0.2 (20% transparency)
+            }
+        }).addTo(map);
+
+
+
+        // Create latitude pins as markers and add them to the map
+        var latitudePins = [
+            { coordinates: [13.960427097650134, 121.1145482751536], name: 'Mataas na Kahoy' },//1
+            { coordinates: [13.9525959052652, 120.92609306647753], name: 'Agoncillo' },//2
+            { coordinates: [14.067116632318964, 120.9304048228642], name: 'Laurel' },//3
+            { coordinates: [14.145132074933167, 121.01922121441443], name: 'Talisay' },//4
+            { coordinates: [14.107798507455575, 121.12049021559298], name: 'Tanauan' }//5
+        ];
+
+
+
+        var markers = [];
+        for (var i = 0; i < latitudePins.length; i++) {
+            var marker = L.marker(latitudePins[i].coordinates).addTo(map);
+            marker.index = i; // Store the pin index in the marker object
+            markers.push(marker);
+        }
+
+        var selectedPinIndex = -1; // Initialize to -1 to indicate no pin is selected
+
+
+
+        // Function to zoom to the specified pin
+        // Your code for initializing the map, markers, and other setup
+
+        // Function to zoom to the specified pin
+        function zoomToPin(index) {
+            if (index >= 0) {
+                var latlng = latitudePins[index].coordinates;
+                map.setView(latlng, 14); // Adjust the zoom level as needed
+                showData(latitudePins[index].name);
+            }
+        }
+
+        // Bind click event for each pin marker
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].on('click', function (e) {
+                var clickedMarker = e.target;
+                var index = clickedMarker.index;
+                zoomToPin(index);
+            });
+        }
+
+        // Function to show all pins with full opacity when the page loads
+        function showAllPins() {
+            selectedPinIndex = -1;
+            setPinOpacity();
+            map.fitBounds(bounds); // Fit the map to show all pins
+            showData('-1');
+        }
+
+        // Call the showAllPins function when the page loads
+        showAllPins();
+
+
+        // Function to set the opacity of all pins based on the selected pin index
+        function setPinOpacity() {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setOpacity(selectedPinIndex === -1 || i === selectedPinIndex ? 1 : 1);
+            }
+            // Update the dropdown value to match the selected pin
+            document.getElementById('pinDropdown').value = selectedPinIndex;
+        }
+
+        // Function to handle the click event on a pin
+        function pinClickHandler(index) {
+            selectedPinIndex = index;
+            setPinOpacity();
+            var latlng = latitudePins[selectedPinIndex].coordinates;
+            var zoomLevel = 14;
+            map.setView(latlng, zoomLevel); // Zoom to level 14 when the pin is clicked
+            showData(latitudePins[selectedPinIndex].name);
+        }
+
+        // Bind click event for each pin marker
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].on('click', function (e) {
+                pinClickHandler(e.target.index);
+            });
+        }
+
+        // Show all pins with full opacity when the page loads
+        setPinOpacity();
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.sub-btn').click(function () {
+                $(this).next('.sub-menu').slideToggle();
+                $(this).find('.dropdown').toggleClass('rotate');
+            });
+        })
+    </script>
+
+
+<script>
+    // Function to fetch filtered data and update the DAO chart
+    function updateDaoChart() {
+        // Get selected month and year
+        const selectedMonth = document.querySelector('#dao-month-dropdown1 .selected').innerText;
+        const selectedYear = document.querySelector('#dao-year-dropdown1 .selected').innerText;
+
+        console.log('Selected Month:', selectedMonth);
+        console.log('Selected Year:', selectedYear);
+
+        // Fetch filtered data based on selected month and year
+        fetch(`/update_dao_chart_data?month=${selectedMonth}&year=${selectedYear}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from Server:', data);
+                // Replace the DAO chart with the updated one
+                console.log(data.plot_path);
+                const daoChartImage = document.getElementById('chart-image-dao1');
+                daoChartImage.src = data.plot_path;
+            })
+            .catch(error => console.error('Error updating DAO chart:', error));
+    }
+
+    // Event listeners for DAO dropdown menus
+    document.getElementById('dao-month-dropdown1').addEventListener('click', updateDaoChart);
+    document.getElementById('dao-year-dropdown1').addEventListener('click', updateDaoChart);
+</script>
+
+   
+<script>
+    // Function to fetch filtered data and update the chart
+    function updateChart() {
+        // Get selected year
+        const selectedYear = document.querySelector('#dao-year-dropdown .selected').innerText;
+        console.log(selectedYear);
+        // Fetch filtered data for the selected year
+        fetch(`/update_chart_data?year=${selectedYear}`)
+            .then(response => response.json())
+            .then(data => {
+                // Replace the chart with the updated one
+                const chartImage = document.getElementById('chart-image1');
+                chartImage.src = data.plot_path;
+            })
+            .catch(error => console.error('Error updating chart:', error));
+    }
+
+    // Event listener for year dropdown menu
+    document.querySelectorAll('#dao-year-dropdown .menu li').forEach(item => {
+        item.addEventListener('click', () => {
+            // Update the selected year
+            document.querySelector('#dao-year-dropdown .selected').innerText = item.innerText;
+            // Update the chart
+            updateChart();
+        });
+    });
+
+    // Update the chart initially
+    updateChart();
+</script>
+
+<script>
+
+
+    var dataArray = []; // Declare the dataArray as a global variable
+
+    var taal_json_data_with_wqi = JSON.parse('{{ taal_json_data|safe }}');
+    dataArray = taal_json_data_with_wqi;
+    // Function to log all data entries to the console
+
+
+    // console.log(taal_json_data_with_wqi); // Log the JSON data
+    function populateDataTable(dataArray) {
+
+
+        const dataTable = document.getElementById('dataTable');
+        dataTable.innerHTML = '';//'<tr><th>ID</th><th>Station</th><th>Month</th><th>BOD</th><th>DO</th><th>pH</th><th>Phosphate</th><th>Ammonia</th><th>Nitrate</th><th>Year</th><th>WQI</th><th>WQC</th></tr>';
+
+        var headerRow = '<table style="width: 100%; border-collapse: collapse;">'
+        headerRow += '<thead class="text-black" style="font-weight: 800; text-transform: uppercase; padding: 10px">';
+        headerRow += '<tr>';
+        headerRow += '<td>Station ID</td><td>Barangay</td><td>Month</td><td>Year</td><td>pH</td><td>Ammonia</td><td>DO</td><td>Nitrate</td><td>Phosphate</td><td>WQI</td><td>WQC</td>';
+        headerRow += '</tr>';
+        headerRow += '</thead>';
+
+        dataTable.innerHTML += headerRow;
+        var buttonHTML = '<button onclick="myFunction()">Click me</button>';
+        dataArray.forEach(function (item) {
+            var row = '<tr>';
+            row += '<td style="text-align: center;">' + item['stationid'] + '</td>'; // Use 'stationid'
+            row += '<td>' + item['Barangay'] + '</td>';
+            row += '<td>' + item['Month'] + '</td>';
+            row += '<td>' + item['Year'] + '</td>';
+            row += '<td>' + item['pH'] + '</td>';
+            /*  var pHValue = parseFloat(item['pH']);
+              var pHColor = '';
+              if (isNaN(pHValue)) {
+                  pHColor = 'lightgray'; // No data
+              } else if (pHValue >= 6.5 && pHValue <= 8.5) {
+                  pHColor = 'blue'; // pH within the range
+              } else if ((pHValue > 6 && pHValue <= 9) || (pHValue >= 6.5 && pHValue <= 9)) {
+                  pHColor = 'yellow'; // pH slightly out of range
+              } else if ((pHValue < 6 || pHValue > 9)) {
+                  pHColor = 'red'; // pH out of range
+              } */
+
+            //row += '<td style="background-color:' + pHColor + ';">' + item['pH'] + '</td>';
+            row += '<td>' + item['Ammonia'] + '</td>';
+            row += '<td>' + item['DO'] + '</td>';
+            row += '<td>' + item['Nitrate'] + '</td>';
+            row += '<td>' + item['Phosphate'] + '</td>';
+            row += '<td>' + item['wqi'] + '</td>';
+            row += '<td>' + item['wqc'] + '</td>';
+
+
+            // Your existing code to build the row
+            if (parseInt(item['Year']) >= 2023) {
+                // Add a condition to hide the button if userType is 'staff'
+                if ("{{ userType }}" !== 'Staff') {
+                    //row += '<td><button class="btn btn-primary" onclick="updateModalButtonClick(\'' + item['id'] + '\', \'' + item['stationid'] + '\', \'' + item['Barangay'] + '\', \'' + item['Month'] + '\', \'' + item['Year'] + '\', \'' + item['pH'] + '\', \'' + item['Ammonia'] + '\', \'' + item['DO'] + '\', \'' + item['Nitrate'] + '\', \'' + item['Phosphate'] + '\')" data-toggle="modal" data-target="#update_data">Update</button></td>';
+
+                } else {
+                    //row += '<td></td>'; // If userType is 'staff', add an empty cell
+                }
+            } else {
+                //row += '<td></td>'; // If the year is before 2023, add an empty cell 
+            }
+            row += '</tr>';
+            dataTable.innerHTML += row;
+        });
+    }
+    populateDataTable(dataArray);//2nd call
+
+
+    // Function to load the appropriate JSON data based on the selected type
+    async function loadCsvData() {
+        const selectedType = document.getElementById('typeDropdown').value;
+        let dataToLoad;
+
+        if (selectedType === 'rivers') {
+            dataToLoad = river_csv_data_with_wqi;
+        } else if (selectedType === 'lakes') {
+            dataToLoad = lake_csv_data_with_wqi;
+        } else {
+            return; // No valid option selected, do nothing
+        }
+
+        try {
+            dataArray = dataToLoad;
+            const dataTable = document.getElementById('dataTable');
+            dataTable.innerHTML = '';//'<tr><th>id</th><th>Station</th><th>Month</th><th>BOD</th><th>DO</th><th>pH</th><th>Phosphate</th><th>Ammonia</th><th>Nitrate</th><th>Year</th><th>WQI</th><th>WQC</th></tr>';
+
+            var headerRow = '<tr>';
+            headerRow += '<td>Station ID</td><td>Barangay</td><td>Month</td><td>Year</td><td>pH</td><td>Ammonia</td><td>DO</td><td>Nitrate</td><td>Phosphate</td><td>WQI</td><td>WQC</td><td>Action</td>';
+            headerRow += '</tr>';
+            dataTable.innerHTML += headerRow;
+            dataArray.forEach(function (item) {
+                var row = '<tr>';
+                row += '<td style="text-align: center;">' + item['stationid'] + '</td>'; // Use 'stationid'
+                row += '<td>' + item['Barangay'] + '</td>';
+                row += '<td>' + item['Month'] + '</td>';
+                row += '<td>' + item['Year'] + '</td>';
+                row += '<td>' + item['pH'] + '</td>';
+                row += '<td>' + item['Ammonia'] + '</td>';
+                row += '<td>' + item['DO'] + '</td>';
+                row += '<td>' + item['Nitrate'] + '</td>';
+                row += '<td>' + item['Phosphate'] + '</td>';
+                row += '<td>' + item['wqi'] + '</td>';
+                row += '<td>' + item['wqc'] + '</td>';
+                row += '</tr>';
+                dataTable.innerHTML += row;
+            });
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
+    }
+
+
+
+    //----------------------year and month filter
+
+    // Function to filter the data based on the selected year and month
+    // Initialize the filteredData array
+    let filteredData = [];
+
+    function filterData() {
+        try {
+            console.log("Filtering data...");
+            const selectedYear = parseInt(document.getElementById('yearDropdown').value, 10); // Convert to numeric
+            const selectedMonth = document.getElementById('monthDropdown').value.trim(); // Trim extra spaces
+            const selectedBarangay = document.getElementById('barangayDropdown').value; // Get the selected Barangay
+            console.log(selectedMonth);
+
+            // Update the filteredData variable with the filtered data
+            filteredData = dataArray.filter(item => {
+                const dataMonth = item['Month'].trim(); // Trim extra spaces from the data
+
+                if (selectedYear && selectedMonth && selectedBarangay) {
+                    return item['Year'] === selectedYear && dataMonth === selectedMonth && item['Barangay'] === selectedBarangay;
+                }
+                if (selectedYear && selectedMonth) {
+                    return item['Year'] === selectedYear && dataMonth === selectedMonth;
+                }
+                if (selectedYear && selectedBarangay) {
+                    return item['Year'] === selectedYear && item['Barangay'] === selectedBarangay;
+                }
+                if (selectedMonth && selectedBarangay) {
+                    return dataMonth === selectedMonth && item['Barangay'] === selectedBarangay;
+                }
+                if (selectedYear) {
+                    return item['Year'] === selectedYear;
+                }
+                if (selectedMonth) {
+                    return dataMonth === selectedMonth;
+                }
+                if (selectedBarangay) {
+                    return item['Barangay'] === selectedBarangay;
+                }
+                return true;
+            });
+
+            console.log("Filtered Data Array:");
+            console.log(filteredData);
+
+            // Call the function to populate the table with filtered data
+            populateDataTable(filteredData);
+        } catch (error) {
+            console.error('Error in filterData:', error);
+        }
+    }
+
+    $('.mydatatable').DataTable({
+             lengthMenu:[[-1],["All"]],
+             paging: false,
+             ordering: false,
+             searching: false,
+             info: false,
+        });
+
+        function applyFilter() {
+            var month = document.querySelector('#month-dropdown .selected').textContent;
+            var year = document.querySelector('#year-dropdown .selected').textContent;
+
+            // Check if month and year are not empty
+            if (month && year) {
+                // Construct the URL for the Flask route with the selected month and year as query parameters
+                var url = "/gis1?month=" + month + "&year=" + year;
+
+                // Redirect to the Flask route with the constructed URL
+                window.location.href = url;
+            } else {
+                alert("Please select both month and year.");
+            }
+        }
+
+</script>
+
+
+</body>
+
+</html>

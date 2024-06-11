@@ -1,0 +1,68 @@
+with multiple shapefile
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoPandas Web Map with Multiple Shapefiles</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            width: 1000px;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var geojson_data1 = {{ geojson_data1|safe }};
+        var geojson_data2 = {{ geojson_data2|safe }};
+
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Create Leaflet GeoJSON layers for both shapefiles
+        var geojsonLayer1 = L.geoJSON(geojson_data1).addTo(map);
+        var geojsonLayer2 = L.geoJSON(geojson_data2).addTo(map);
+
+        // Fit the map to the bounds of both GeoJSON layers
+        map.fitBounds(geojsonLayer1.getBounds().extend(geojsonLayer2.getBounds()));
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+from flask import Flask, render_template
+import geopandas as gpd
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    # Read the first shapefile using GeoPandas
+    data1 = gpd.read_file('D:/Documents/Python Scripts/shapefile/lagunalakes.shp')
+    geojson_data1 = data1.to_json()
+
+    # Read the second shapefile using GeoPandas
+    data2 = gpd.read_file('D:/Documents/Python Scripts/shapefile/AFG_water_areas_dcw.shp')
+    geojson_data2 = data2.to_json()
+
+    return render_template('index.html', geojson_data1=geojson_data1, geojson_data2=geojson_data2)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8080)

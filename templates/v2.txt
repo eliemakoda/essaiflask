@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoPandas Web Map with Labeled Pins</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            width: 1000px;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var geojson_data = {{ geojson_data|safe }};
+
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Create a Leaflet GeoJSON layer
+        var geojsonLayer = L.geoJSON(geojson_data);
+
+        // Add the GeoJSON layer to the map
+        geojsonLayer.addTo(map);
+
+        // Fit the map to the bounds of the GeoJSON data
+        map.fitBounds(geojsonLayer.getBounds());
+
+        // Add a red icon for the markers (pins)
+        var redIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+        });
+
+        // Sample station coordinates
+        var stationCoordinates = [
+            [14.388322, 121.277121],
+            [14.272137, 121.283256],
+            // Add more coordinates here as needed
+        ];
+
+        // Add multiple markers (pins) to the map with labels
+        for (var i = 0; i < stationCoordinates.length; i++) {
+            var marker = L.marker(stationCoordinates[i], { icon: redIcon }).addTo(map);
+            marker.bindPopup("Station " + (i + 1));
+
+            // Add a click event to the marker to display text in the "function" div and zoom the map
+            marker.on('click', function (e) {
+                var stationNumber = i + 1; // Get the station number
+                document.getElementById('function').innerText = "Clicked on Station " + stationNumber;
+
+                // Zoom the map to the clicked marker's location
+                map.setView(e.latlng, 12);
+            });
+        }
+
+    </script>
+
+    <div id="function"></div>
+</body>
+</html>
+
+
+------------------------
+
+from flask import Flask, render_template, send_file
+import geopandas as gpd
+import matplotlib.pyplot as plt
+from io import BytesIO
+
+app = Flask(__name__)
+
+# Function to create a static plot of the shapefile
+def create_shapefile_plot(shapefile_path):
+    gdf = gpd.read_file(shapefile_path)
+
+    # Customize the plot appearance if needed
+    gdf.plot(color='blue', edgecolor='black', linewidth=0.5, legend=True)
+    plt.title('Shapefile Plot')
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
+
+    # Save the plot to a BytesIO object
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+
+    return buffer
+
+@app.route('/')
+def index():
+    try:
+        # Read the shapefile using GeoPandas
+        data = gpd.read_file('D:/Documents/Python Scripts/shapefile/lagunalakes.shp')
+
+        # Convert the GeoPandas data to GeoJSON to pass to the frontend
+        geojson_data = data.to_json()
+
+        return render_template('index.html', geojson_data=geojson_data)
+    except Exception as e:
+        return f"Error: {e}"
+
+@app.route('/plot_shapefile')
+def plot_shapefile():
+    try:
+        shapefile_path = 'D:/Documents/Python Scripts/shapefile/lagunalakes.shp'
+        buffer = create_shapefile_plot(shapefile_path)
+
+        # Return the plot image as a response
+        return send_file(buffer, mimetype='image/png')
+    except Exception as e:
+        return f"Error: {e}"
+
+if __name__ == '__main__':
+
+    app.run(debug=False, port=8080)

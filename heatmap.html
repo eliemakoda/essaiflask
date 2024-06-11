@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_255aaae46dc76aacb5ff183c554676f9 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>
+    
+    
+    <div style="
+        position: fixed; 
+        bottom: 50px; 
+        left: 50px; 
+        z-index:9999; 
+        padding: 10px;
+        background-color: white;
+        border: 2px solid grey;
+        font-size:14px;
+        ">
+        &nbsp; Heatmap Legend <br>
+        &nbsp; <i class="fa fa-square" style="color:#0000FF"></i> 0 - 50 &nbsp; Excellent <br>
+        &nbsp; <i class="fa fa-square" style="color:#00FF00"></i> 51 - 100 &nbsp; Good <br>
+        &nbsp; <i class="fa fa-square" style="color:#FFFF00"></i> 101 - 200 &nbsp; Poor <br>
+        &nbsp; <i class="fa fa-square" style="color:#FFA500"></i> 201 - 300 &nbsp; Very Poor <br>
+        &nbsp; <i class="fa fa-square" style="color:#FF0000"></i> >= 301 &nbsp; Unsuitable <br>
+    </div>
+    
+    
+            <div class="folium-map" id="map_255aaae46dc76aacb5ff183c554676f9" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_255aaae46dc76aacb5ff183c554676f9 = L.map(
+                "map_255aaae46dc76aacb5ff183c554676f9",
+                {
+                    center: [14.039090277775, 120.995645833375],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 10,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_242ea0c66da322998b31d7f40d528ab5 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_242ea0c66da322998b31d7f40d528ab5.addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+            var heat_map_58364de6701b5649e9c70b0207a2a463 = L.heatLayer(
+                [[14.0831666667, 120.9715, 0.93], [14.0869166667, 121.035305556, 0.93], [14.0251944444, 120.955305556, 0.93], [14.0686388889, 120.94525, 0.93], [13.9779444444, 120.962277778, 0.93], [14.0594166667, 121.056472222, 0.93]],
+                {"blur": 15, "maxZoom": 18, "minOpacity": 0.5, "radius": 25}
+            );
+        
+    
+            heat_map_58364de6701b5649e9c70b0207a2a463.addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+            var marker_5a52de014ba7b6a2be2461d85dfab011 = L.marker(
+                [14.0831666667, 120.9715],
+                {}
+            ).addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+        var popup_bce9bf79a13d96f8fc1094e155a8ae6e = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_fa0c6d5c4042f6741b05071f03041853 = $(`<div id="html_fa0c6d5c4042f6741b05071f03041853" style="width: 100.0%; height: 100.0%;"><div style='width: 180px;' class = 'fs-3'><b>Sampaloc</b><br>pH: 8.05<br>Ammonia: 0.66<br>DO: 5.95<br>Nitrate: 0.06<br>Phosphate: 2.39<br>wqi: 281.23<br>wqc: Very Poor<br></div></div>`)[0];
+                popup_bce9bf79a13d96f8fc1094e155a8ae6e.setContent(html_fa0c6d5c4042f6741b05071f03041853);
+            
+        
+
+        marker_5a52de014ba7b6a2be2461d85dfab011.bindPopup(popup_bce9bf79a13d96f8fc1094e155a8ae6e)
+        ;
+
+        
+    
+    
+            var marker_b82baa794d06dabe62d415ef97007769 = L.marker(
+                [14.0869166667, 121.035305556],
+                {}
+            ).addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+        var popup_d22ea0f8f183f90f8c768be5fddad11e = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_aca3cc8e8dc60e194093aee1353ece11 = $(`<div id="html_aca3cc8e8dc60e194093aee1353ece11" style="width: 100.0%; height: 100.0%;"><div style='width: 180px;' class = 'fs-3'><b>Quiling</b><br>pH: 8.06<br>Ammonia: 0.56<br>DO: 3.37<br>Nitrate: 0.14<br>Phosphate: 2.27<br>wqi: 259.27<br>wqc: Very Poor<br></div></div>`)[0];
+                popup_d22ea0f8f183f90f8c768be5fddad11e.setContent(html_aca3cc8e8dc60e194093aee1353ece11);
+            
+        
+
+        marker_b82baa794d06dabe62d415ef97007769.bindPopup(popup_d22ea0f8f183f90f8c768be5fddad11e)
+        ;
+
+        
+    
+    
+            var marker_c1bb433af1b38554f71b8900d800f77b = L.marker(
+                [14.0251944444, 120.955305556],
+                {}
+            ).addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+        var popup_48871e991506e24bc3848990ace4b8d0 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_6f5ccb4827fe22d6cdd8bc76967a5b4d = $(`<div id="html_6f5ccb4827fe22d6cdd8bc76967a5b4d" style="width: 100.0%; height: 100.0%;"><div style='width: 180px;' class = 'fs-3'><b>Buso-Buso</b><br>pH: 8.04<br>Ammonia: 0.61<br>DO: 3.04<br>Nitrate: 0.08<br>Phosphate: 2.31<br>wqi: 266.99<br>wqc: Very Poor<br></div></div>`)[0];
+                popup_48871e991506e24bc3848990ace4b8d0.setContent(html_6f5ccb4827fe22d6cdd8bc76967a5b4d);
+            
+        
+
+        marker_c1bb433af1b38554f71b8900d800f77b.bindPopup(popup_48871e991506e24bc3848990ace4b8d0)
+        ;
+
+        
+    
+    
+            var marker_f19ee89bd116d941484240a5cd6a7a3e = L.marker(
+                [14.0686388889, 120.94525],
+                {}
+            ).addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+        var popup_624be26dab2550d3fe5f665d2dff0ba7 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_7f086ffe9b93f1c05e6e32740637e109 = $(`<div id="html_7f086ffe9b93f1c05e6e32740637e109" style="width: 100.0%; height: 100.0%;"><div style='width: 180px;' class = 'fs-3'><b>Leviste</b><br>pH: 8.02<br>Ammonia: 0.56<br>DO: 4.41<br>Nitrate: 0.11<br>Phosphate: 2.27<br>wqi: 260.17<br>wqc: Very Poor<br></div></div>`)[0];
+                popup_624be26dab2550d3fe5f665d2dff0ba7.setContent(html_7f086ffe9b93f1c05e6e32740637e109);
+            
+        
+
+        marker_f19ee89bd116d941484240a5cd6a7a3e.bindPopup(popup_624be26dab2550d3fe5f665d2dff0ba7)
+        ;
+
+        
+    
+    
+            var marker_feb74c397714b6e352dad8aa33291081 = L.marker(
+                [13.9779444444, 120.962277778],
+                {}
+            ).addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+        var popup_53219ff1d94043736846ef4cd7750b11 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_128132c58ae55522ce673ee3f9ca4218 = $(`<div id="html_128132c58ae55522ce673ee3f9ca4218" style="width: 100.0%; height: 100.0%;"><div style='width: 180px;' class = 'fs-3'><b>Manalaw</b><br>pH: 8.19<br>Ammonia: 0.5<br>DO: 4.27<br>Nitrate: 0.08<br>Phosphate: 2.22<br>wqi: 250.24<br>wqc: Very Poor<br></div></div>`)[0];
+                popup_53219ff1d94043736846ef4cd7750b11.setContent(html_128132c58ae55522ce673ee3f9ca4218);
+            
+        
+
+        marker_feb74c397714b6e352dad8aa33291081.bindPopup(popup_53219ff1d94043736846ef4cd7750b11)
+        ;
+
+        
+    
+    
+            var marker_466acc94a1aed95d8d610acd23e13f04 = L.marker(
+                [14.0594166667, 121.056472222],
+                {}
+            ).addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+        var popup_be4b462f5ab2a7f3e8c263cecdb1788c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_3f07e834d045b32db6081923701f14f9 = $(`<div id="html_3f07e834d045b32db6081923701f14f9" style="width: 100.0%; height: 100.0%;"><div style='width: 180px;' class = 'fs-3'><b>Tanauan</b><br>pH: 8.15<br>Ammonia: 0.53<br>DO: 5.2<br>Nitrate: 0.12<br>Phosphate: 2.24<br>wqi: 255.55<br>wqc: Very Poor<br></div></div>`)[0];
+                popup_be4b462f5ab2a7f3e8c263cecdb1788c.setContent(html_3f07e834d045b32db6081923701f14f9);
+            
+        
+
+        marker_466acc94a1aed95d8d610acd23e13f04.bindPopup(popup_be4b462f5ab2a7f3e8c263cecdb1788c)
+        ;
+
+        
+    
+    
+            var layer_control_8be8221d5be2e160626c84287da468ee_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_242ea0c66da322998b31d7f40d528ab5,
+                },
+                overlays :  {
+                    "wqi" : heat_map_58364de6701b5649e9c70b0207a2a463,
+                },
+            };
+            let layer_control_8be8221d5be2e160626c84287da468ee = L.control.layers(
+                layer_control_8be8221d5be2e160626c84287da468ee_layers.base_layers,
+                layer_control_8be8221d5be2e160626c84287da468ee_layers.overlays,
+                {"autoZIndex": true, "collapsed": true, "position": "topright"}
+            ).addTo(map_255aaae46dc76aacb5ff183c554676f9);
+
+        
+    
+            tile_layer_242ea0c66da322998b31d7f40d528ab5.addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+    
+            heat_map_58364de6701b5649e9c70b0207a2a463.addTo(map_255aaae46dc76aacb5ff183c554676f9);
+        
+</script>
+</html>

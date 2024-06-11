@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="../static/css/adminpanel.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+
+<body style="position: relative; width: 100%; background: #E5E7EB; display: flex;">
+
+    <div class="side-bar">
+        <!--header section-->
+        <header>
+            <!--image-->
+            <img src="{{ profile_image }}" alt="{{ fname }} {{ lname }}" alt="">
+            <!--logo-->
+            <h1>{{ fname }} {{ lname }}</h1>
+        </header>
+
+        <!--Menu items-->
+        <div class="menu-2">
+            <div class="item"><a href="{{ url_for('adminpanel') }}"><i class='bx bxs-dashboard' ></i>Dashboard</a></div>
+            <div class="item"><a class="sub-btn"><i class='bx bx-water' ></i>Water Monitoring
+                <!--dropdown-->
+                <!--dropdown arrow-->
+                <i class="bx bx-chevron-right dropdown1"></i>
+            </a>
+                <div class="sub-menu">
+                    <a href="#" class="sub-item" onclick="openSaveToDatabaseModal()">Add Records</a>
+                    <a href="{{ url_for('gis') }}" class="sub-item">GIS</a>
+                    <!-- <a href="" class="sub-item">Barangay</a> -->
+                    <a href="{{ url_for('charts') }}" class="sub-item">Charts</a>
+                </div>
+            </div>
+
+            <div class="item"><a href="{{ url_for('result2') }}"><i class='bx bxs-megaphone'></i>Result</a></div>
+            <div class="item"><a href="{{ url_for('announcements') }}"><i class='bx bxs-megaphone'></i>Announcement</a></div>
+            <div class="item"><a href="{{ url_for('services') }}"><i class='bx bxs-certification'></i>Services</a></div>
+            <div class="item"><a href="{{ url_for('activities') }}"><i class='bx bx-news'></i>Activities</a></div>
+            <!--<div class="item"><a href="{{ url_for('gis') }}"><i class='bx bxs-map' ></i>GIS</a></div>
+            <div class="item"><a href="{{ url_for('charts') }}"><i class='bx bxs-bar-chart-alt-2' ></i>Charts</a></div>
+            <div class="item"><a href="{{ url_for('abouts') }}"><i class='bx bxs-info-circle' ></i>Abouts</a></div> -->
+            <div class="item"><a href="{{ url_for('contacts') }}"><i class='bx bxs-phone' ></i>Contacts</a></div> 
+            <div class="item"><a class="sub-btn"><i class='bx bx-cog' ></i>Settings
+                <!--dropdown-->
+                <!--dropdown arrow-->
+                <i class="bx bx-chevron-right dropdown1"></i>
+            </a>
+                <div class="sub-menu">
+                    {% if userType == 'admin' %}
+                        <a href="{{ url_for('user') }}" class="sub-item">User Management</a>
+                    {% endif %}
+                    <!-- <a href="" class="sub-item">Barangay</a> -->
+                    <a href="{{ url_for('logout') }}" class="sub-item">Log out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="createannouncement" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Create Announcement</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Title</label>
+                            <input type="text" class="form-control" id="recipient-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Description</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Upload Image</label>
+                            <input type="file" name="announce-image" id="announce-image" class="form-control" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="interface">
+
+
+        <div class="navigation">
+            <div class="n1">
+                <div>
+                    <i id="menu-btn" class="bx bxs-layers"></i>
+                </div>
+            </div>
+            <div class="taal-logo">
+                <i class="fa-solid fa-bell"></i>
+                <img src="../static/img/bfarlogo.png" alt="">
+            </div>
+        </div>
+
+        <h3 class="i-name">
+            CHARTS
+        </h3>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-2">
+                <div class="form-group" style="text-align: center;">
+                    <label class="m-0 font-weight-bold" style="color: #001c50; font-size: 17px;">Search by Station
+                        ID:</label>
+                    <select id="barangayDropdown" onchange="filterData()" class="w-100"
+                        style="height: 40px; width: 10px; border-radius: 7px; " data-live-search="true">
+                        <option value="">All</option>
+                        <option value="Ambulong">Ambulong</option>
+                        <option value="Bañaga">Bañaga</option>
+                        <option value="Berinayan">Berinayan</option>
+                        <option value="Buso-Buso">Buso-Buso</option>
+                        <option value="Leviste">Leviste</option>
+                        <option value="Manalao">Manalaw</option>
+                        <option value="Mataas na Kahoy">Mataas na Kahoy</option>
+                        <option value="Nangkaan">Nangkaan</option>
+                        <option value="Pulang Bato">Pulang Bato</option>
+                        <option value="Quiling">Quiling</option>
+                        <option value="Sampaloc">Sampaloc</option>
+                        <option value="San Isidro">San Isidro</option>
+                        <option value="San Nicolas">San Nicolas</option>
+                        <option value="Tanauan">Tanauan</option>
+                        <option value="Talisay">Talisay</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group" style="text-align: center;">
+                    <label class="m-0 font-weight-bold" style="color: #001c50; font-size: 17px;"
+                        for="yearDropdown">Select Year:</label>
+                    <select id="yearDropdown" onchange="filterData()" class="w-100"
+                        style="height: 40px; width: 10px; border-radius: 7px; " data-live-search="true">
+                        <option value="">All</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group" style="text-align: center;">
+                    <label class="m-0 font-weight-bold" style="color: #001c50; font-size: 17px;">Select Month:</label>
+                    <select id="monthDropdown" onchange="filterData()" class="w-100"
+                        style="height: 40px; border-radius: 7px; " data-live-search="true">
+                        <option value="">All</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+
+
+        <div class="board">
+            <div class="n2">
+                <!--<div class="search">
+                    <i class="bx bx-search"></i>
+                    <input type="text" placeholder="Search">
+                </div> -->
+                <!--<a class="text-white" href="#" onclick="openSaveToDatabaseModal()"
+                    style="border: 1px solid #e4e4e4; border-radius: 5px; padding: 10px; background-color: #0f8000; text-decoration: none;">Add
+                    Parameters</a>-->
+                <!--<button style="background-color: #001c50; color: #FFFFFF; height: 40px; width: 170px; border-radius: 7px;" onclick="openSaveToDatabaseModal()"><i class='bx bx-plus-circle' ></i>Add Parameters</button> -->
+                <button style="background-color: #001c50; color: #FFFFFF; height: 40px; width: 300px; border-radius: 7px; margin-left: 20px" data-toggle="modal" data-target="#generatereport">Generate Printable Report</button>
+                <button style="background-color: #001c50; color: #FFFFFF; height: 40px; width: 150px; border-radius: 7px; margin-left: 20px" onclick="redirectToChartsDAO()">Dao 2016</button>
+            </div>
+            <div class="table-responsive">
+                <table id="dataTable" width="100%">
+                    <thead class="text-white">
+                        <tr>
+                            <td>Station ID</td>
+                            <td>Barangay</td>
+                            <td>Month</td>
+                            <td>Year</td>
+                            <td>pH</td>
+                            <td>Ammonia</td>
+                            <td>DO</td>
+                            <td>Nitrate</td>
+                            <td>Phosphate</td>
+                            <td>WQI</td>
+                            <td>WQC</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+
+    
+
+
+</div>
+    
+<!-- MODAL FOR SAVING -->
+<div class="modal fade" id="save_to_database" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document" >
+    <div class="modal-content" style="width: 1100px" >
+        <div id="alertMessage"></div>
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Physical and Chemical Parameter</h5>
+
+        </div>
+        <form action="/save_to_database" method="POST">
+
+            <div class="modal-body" >
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="w-100 m-0 font-weight-bold"
+                            style="color: #00889E; font-size: 17px;">Select ID:</label>
+                        <select name="station_id" class="w-100" style="height: 40px; border-radius: 7px;"
+                            data-live-search="true">
+                            <option value="-1">Select a ID</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="w-100 m-0 font-weight-bold"
+                            style="color: #00889E; font-size: 17px;">Select Station Name:</label>
+                        <select name="station_name" class="w-100" style="height: 40px; border-radius: 7px;"
+                            data-live-search="true">
+                            <option value="-1">Select a Station</option>
+                            <!-- <option value="Stn. I (Central West bay)">Stn. I (Central West bay)</option>
+                         <option value="Stn. II (East Bay)">Stn. II (East Bay)</option>
+                         <option value="Stn. IV (Central Bay)">Stn. IV (Central Bay)</option>
+                         <option value="Stn. V (Northern West Bay)">Stn. V (Northern West Bay)</option>
+                         <option value="Stn. VIII (South Bay)">Stn. VIII (South Bay)</option>
+                         <option value="Stn. XV (San Pedro)">Stn. XV (San Pedro)</option>
+                         <option value="Stn. XVII (Sanctuary)">Stn. XVII (Sanctuary)</option>
+                         <option value="Stn. XVIII (Pagsanjan)">Stn. XVIII (Pagsanjan)</option>
+                         <option value="Stn. XVI (Sta. Rosa)">Stn. XVI (Sta. Rosa)</option> -->
+                            <!-- Add more options if needed -->
+                            <option value="Tanauan">Tanauan</option>
+                            <option value="Nangkaan">Nangkaan</option>
+                            <option value="Bañaga">Bañaga</option>
+                            <option value="Manalaw">Manalaw</option>
+                            <option value="Leviste">Leviste</option>
+                            <option value="Buso Buso">Buso Buso</option>
+                            <option value="Quiling">Quiling</option>
+                            <option value="Sampaloc">Sampaloc</option>
+                            <option value="San Isidro">San Isidro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <span style="margin: 0 20px;"></span> <!-- Add a space between the dropdowns -->
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="w-100 m-0 font-weight-bold"
+                            style="color: #00889E; font-size: 17px;">Select Month:</label>
+                        <select name="month" class="w-100" style="height: 40px; border-radius: 7px;"
+                            data-live-search="true">
+                            <option value="">Select a month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="w-100 m-0 font-weight-bold"
+                            style="color: #00889E; font-size: 17px;">Select Year:</label>
+                        <select name="year" class="w-100" style="height: 40px; border-radius: 7px;"
+                            data-live-search="true">
+                            <option value="">Select a year</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <!-- Add more options for the years you want to include -->
+                        </select>
+                    </div>
+                </div>
+
+                <span style="margin: 0 20px;"></span> <!-- Add a space between the dropdowns -->
+
+                <div class="row">
+                    <!-- <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">BOD</label>
+                            <input name="BOD" type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div> -->
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">DO</label>
+                            <input name="do" type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">pH</label>
+                            <input name="ph" type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Phosphate</label>
+                            <input name="phosphate" type="text" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Ammonia</label>
+                            <input name="ammonia" type="text" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Nitrate</label>
+                            <input name="nitrate" type="text" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                </div>
+                <div><h2>Physical Parameters</h2></div>
+                <div class="row">
+                    <div class = "col-md-3">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Time:</label>
+                            <input name="time" type="time" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+
+                    <div class = "col-md-3">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Weather Condition:</label>
+                            <input name="weater-condition" type="text" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="w-100 m-0 font-weight-bold"
+                            style="color: #00889E; font-size: 17px;">Wind Direction:</label>
+                        <select name="wind-direction" class="w-100" style="height: 40px; border-radius: 7px;"
+                            data-live-search="true">
+                            <option value="-1">Wind Direction </option>
+                            <option value="NE">NE</option>
+                            <option value="ENE">ENE</option>
+                            <option value="E">E</option>
+                            <option value="WSW">WSW</option>
+                            <option value="SW">SW</option>
+                            <option value="SE">SE</option>
+                        </select>
+                    </div>
+
+                    <div class = "col-md-3">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Color of Water:</label>
+                            <input name="color-of-water" type="text" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Air Temperature (0C)</label>
+                            <input name="air-temperature" type="number" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Water Transparency (m)</label>
+                            <input name="water-transparency" type="number" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">Water Temperature (0C)</label>
+                            <input name="water-temp" type="number" class="form-control"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Data</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+    <!-- MODAL FOR SAVING -->
+    <div class="modal fade" id="update_data" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div id="alertMessage"></div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Save to database</h5>
+
+                </div>
+                <form action="/update_data" method="POST">
+
+                    <div class="modal-body">
+                        <input type="text" name="update_id1" id="update_id1">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select ID:</label>
+                                <select name="updatestation_id" class="w-100" style="height: 40px; border-radius: 7px;"
+                                    data-live-search="true">
+                                    <option value="-1">Select a ID</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select Station Name:</label>
+                                <select name="updatestation_name" class="w-100"
+                                    style="height: 40px; border-radius: 7px;" data-live-search="true">
+                                    <option value="-1">Select a Station</option>
+
+                                    <option value="Tanauan">Tanauan</option>
+                                    <option value="Nangkaan">Nangkaan</option>
+                                    <option value="Bañaga">Bañaga</option>
+                                    <option value="Manalaw">Manalaw</option>
+                                    <option value="Leviste">Leviste</option>
+                                    <option value="Buso Buso">Buso Buso</option>
+                                    <option value="Quiling">Quiling</option>
+                                    <option value="Sampaloc">Sampaloc</option>
+                                    <option value="San Isidro">San Isidro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <span style="margin: 0 20px;"></span> <!-- Add a space between the dropdowns -->
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select Month:</label>
+                                <select name="updateMonth" class="w-100" style="height: 40px; border-radius: 7px;"
+                                    data-live-search="true">
+                                    <option value="">Select a month</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select Year:</label>
+                                <select name="updateyear" class="w-100" style="height: 40px; border-radius: 7px;"
+                                    data-live-search="true">
+                                    <option value="">Select a year</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <!-- Add more options for the years you want to include -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <span style="margin: 0 20px;"></span> <!-- Add a space between the dropdowns -->
+
+                        <div class="row">
+                            <!-- <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <label class="w-100 m-0 font-weight-bold"
+                                style="color: #00889E; font-size: 17px;">BOD</label>
+                            <input name="BOD" type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div> -->
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">DO</label>
+                                    <input name="updatedo" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">pH</label>
+                                    <input name="updateph" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">Phosphate</label>
+                                    <input name="updatephosphate" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">Ammonia</label>
+                                    <input name="updateammonia" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">Nitrate</label>
+                                    <input name="updatenitrate" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- GENERATE REPORT -->
+<div class="modal fade" id="generatereport" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Select Monthly Report</h5>
+        
+  
+        </div>
+        <form action="/generate_report" method="POST" target="_blank">
+        
+            <div class="modal-body">
+                <label for="quarter">Select Month:</label>
+                <select name="month" id="month">
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                </select>
+                <span style="margin: 0 20px;"></span> <!-- Add a space between the dropdowns -->
+                <label for="year">Select Year:</label>
+                <select name="year" id="year">
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <!-- Add more options for the years you want to include -->
+                </select>
+
+                <div class="row pt-3">
+                    <h4>Station</h4>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="stations" value="Talisay" id="stationTalisay">
+                            <label class="form-check-label" for="stationTalisay">Talisay</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="stations" value="Laurel" id="stationLaurel">
+                            <label class="form-check-label" for="stationLaurel">Laurel</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="stations" value="Agoncillo" id="stationAgoncillo">
+                            <label class="form-check-label" for="stationAgoncillo">Agoncillo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="stations" value="Mataas na Kahoy" id="stationMataasNaKahoy">
+                            <label class="form-check-label" for="stationMataasNaKahoy">Mataas na Kahoy</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="stations" value="Tanauan" id="stationTanauan">
+                            <label class="form-check-label" for="stationTanauan">Tanauan</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Generate Report</button>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>
+<!-- MODAL FOR SAVING -->
+    <div class="modal fade" id="save_to_database" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div id="alertMessage"></div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Physical and Chemical Parameter</h5>
+
+                </div>
+                <form action="/save_to_database" method="POST">
+
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select ID:</label>
+                                <select name="station_id" class="w-100" style="height: 40px; border-radius: 7px;"
+                                    data-live-search="true">
+                                    <option value="-1">Select a ID</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select Station Name:</label>
+                                <select name="station_name" class="w-100" style="height: 40px; border-radius: 7px;"
+                                    data-live-search="true">
+                                    <option value="-1">Select a Station</option>
+                                    <!-- <option value="Stn. I (Central West bay)">Stn. I (Central West bay)</option>
+                                 <option value="Stn. II (East Bay)">Stn. II (East Bay)</option>
+                                 <option value="Stn. IV (Central Bay)">Stn. IV (Central Bay)</option>
+                                 <option value="Stn. V (Northern West Bay)">Stn. V (Northern West Bay)</option>
+                                 <option value="Stn. VIII (South Bay)">Stn. VIII (South Bay)</option>
+                                 <option value="Stn. XV (San Pedro)">Stn. XV (San Pedro)</option>
+                                 <option value="Stn. XVII (Sanctuary)">Stn. XVII (Sanctuary)</option>
+                                 <option value="Stn. XVIII (Pagsanjan)">Stn. XVIII (Pagsanjan)</option>
+                                 <option value="Stn. XVI (Sta. Rosa)">Stn. XVI (Sta. Rosa)</option> -->
+                                    <!-- Add more options if needed -->
+                                    <option value="Tanauan">Tanauan</option>
+                                    <option value="Nangkaan">Nangkaan</option>
+                                    <option value="Bañaga">Bañaga</option>
+                                    <option value="Manalaw">Manalaw</option>
+                                    <option value="Leviste">Leviste</option>
+                                    <option value="Buso Buso">Buso Buso</option>
+                                    <option value="Quiling">Quiling</option>
+                                    <option value="Sampaloc">Sampaloc</option>
+                                    <option value="San Isidro">San Isidro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <span style="margin: 0 20px;"></span> <!-- Add a space between the dropdowns -->
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select Month:</label>
+                                <select name="month" class="w-100" style="height: 40px; border-radius: 7px;"
+                                    data-live-search="true">
+                                    <option value="">Select a month</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="w-100 m-0 font-weight-bold"
+                                    style="color: #00889E; font-size: 17px;">Select Year:</label>
+                                <select name="year" class="w-100" style="height: 40px; border-radius: 7px;"
+                                    data-live-search="true">
+                                    <option value="">Select a year</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <!-- Add more options for the years you want to include -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <span style="margin: 0 20px;"></span> <!-- Add a space between the dropdowns -->
+
+                        <div class="row">
+                            <!-- <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">BOD</label>
+                                    <input name="BOD" type="text" class="form-control" aria-label="Sizing example input"
+                                        aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div> -->
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">DO</label>
+                                    <input name="do" type="text" class="form-control" aria-label="Sizing example input"
+                                        aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">pH</label>
+                                    <input name="ph" type="text" class="form-control" aria-label="Sizing example input"
+                                        aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">Phosphate</label>
+                                    <input name="phosphate" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">Ammonia</label>
+                                    <input name="ammonia" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <label class="w-100 m-0 font-weight-bold"
+                                        style="color: #00889E; font-size: 17px;">Nitrate</label>
+                                    <input name="nitrate" type="text" class="form-control"
+                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+
+    <script>
+
+
+        var dataArray = []; // Declare the dataArray as a global variable
+
+        var taal_json_data_with_wqi = JSON.parse('{{ taal_json_data|safe }}');
+        dataArray = taal_json_data_with_wqi;
+        // Function to log all data entries to the console
+
+
+        // console.log(taal_json_data_with_wqi); // Log the JSON data
+        function populateDataTable(dataArray) {
+
+
+            const dataTable = document.getElementById('dataTable');
+            dataTable.innerHTML = '';//'<tr><th>ID</th><th>Station</th><th>Month</th><th>BOD</th><th>DO</th><th>pH</th><th>Phosphate</th><th>Ammonia</th><th>Nitrate</th><th>Year</th><th>WQI</th><th>WQC</th></tr>';
+
+            var headerRow = '<table style="width: 100%; border-collapse: collapse;">'
+            headerRow += '<thead class="text-white" style="font-weight: 800; text-transform: uppercase; padding: 10px">';
+            headerRow += '<tr>';
+            headerRow += '<td>Station ID</td><td>Barangay</td><td>Month</td><td>Year</td><td>pH</td><td>Ammonia</td><td>DO</td><td>Nitrate</td><td>Phosphate</td><td>WQI</td><td>WQC</td><td>Action</td>';
+            headerRow += '</tr>';
+            headerRow += '</thead>';
+
+            dataTable.innerHTML += headerRow;
+            var buttonHTML = '<button onclick="myFunction()">Click me</button>';
+            dataArray.forEach(function (item) {
+                var row = '<tr>';
+                row += '<td style="text-align: center;">' + item['stationid'] + '</td>'; // Use 'stationid'
+                row += '<td>' + item['Barangay'] + '</td>';
+                row += '<td>' + item['Month'] + '</td>';
+                row += '<td>' + item['Year'] + '</td>';
+                row += '<td>' + item['pH'] + '</td>';
+                /*  var pHValue = parseFloat(item['pH']);
+                  var pHColor = '';
+                  if (isNaN(pHValue)) {
+                      pHColor = 'lightgray'; // No data
+                  } else if (pHValue >= 6.5 && pHValue <= 8.5) {
+                      pHColor = 'blue'; // pH within the range
+                  } else if ((pHValue > 6 && pHValue <= 9) || (pHValue >= 6.5 && pHValue <= 9)) {
+                      pHColor = 'yellow'; // pH slightly out of range
+                  } else if ((pHValue < 6 || pHValue > 9)) {
+                      pHColor = 'red'; // pH out of range
+                  } */
+
+                //row += '<td style="background-color:' + pHColor + ';">' + item['pH'] + '</td>';
+                row += '<td>' + item['Ammonia'] + '</td>';
+                row += '<td>' + item['DO'] + '</td>';
+                row += '<td>' + item['Nitrate'] + '</td>';
+                row += '<td>' + item['Phosphate'] + '</td>';
+                row += '<td>' + item['wqi'] + '</td>';
+                row += '<td>' + item['wqc'] + '</td>';
+
+
+                // Your existing code to build the row
+                if (parseInt(item['Year']) >= 2023) {
+                    // Add a condition to hide the button if userType is 'staff'
+                    if ("{{ userType }}" !== 'Staff') {
+                        row += '<td><button class="btn btn-primary" onclick="updateModalButtonClick(\'' + item['id'] + '\', \'' + item['stationid'] + '\', \'' + item['Barangay'] + '\', \'' + item['Month'] + '\', \'' + item['Year'] + '\', \'' + item['pH'] + '\', \'' + item['Ammonia'] + '\', \'' + item['DO'] + '\', \'' + item['Nitrate'] + '\', \'' + item['Phosphate'] + '\')" data-toggle="modal" data-target="#update_data">Update</button></td>';
+
+                    } else {
+                        row += '<td></td>'; // If userType is 'staff', add an empty cell
+                    }
+                } else {
+                    row += '<td></td>'; // If the year is before 2023, add an empty cell 
+                }
+                row += '</tr>';
+                dataTable.innerHTML += row;
+            });
+        }
+        populateDataTable(dataArray);//2nd call
+
+
+        // Function to load the appropriate JSON data based on the selected type
+        async function loadCsvData() {
+            const selectedType = document.getElementById('typeDropdown').value;
+            let dataToLoad;
+
+            if (selectedType === 'rivers') {
+                dataToLoad = river_csv_data_with_wqi;
+            } else if (selectedType === 'lakes') {
+                dataToLoad = lake_csv_data_with_wqi;
+            } else {
+                return; // No valid option selected, do nothing
+            }
+
+            try {
+                dataArray = dataToLoad;
+                const dataTable = document.getElementById('dataTable');
+                dataTable.innerHTML = '';//'<tr><th>id</th><th>Station</th><th>Month</th><th>BOD</th><th>DO</th><th>pH</th><th>Phosphate</th><th>Ammonia</th><th>Nitrate</th><th>Year</th><th>WQI</th><th>WQC</th></tr>';
+
+                var headerRow = '<tr>';
+                headerRow += '<td>Station ID</td><td>Barangay</td><td>Month</td><td>Year</td><td>pH</td><td>Ammonia</td><td>DO</td><td>Nitrate</td><td>Phosphate</td><td>WQI</td><td>WQC</td><td>Action</td>';
+                headerRow += '</tr>';
+                dataTable.innerHTML += headerRow;
+                dataArray.forEach(function (item) {
+                    var row = '<tr>';
+                    row += '<td style="text-align: center;">' + item['stationid'] + '</td>'; // Use 'stationid'
+                    row += '<td>' + item['Barangay'] + '</td>';
+                    row += '<td>' + item['Month'] + '</td>';
+                    row += '<td>' + item['Year'] + '</td>';
+                    row += '<td>' + item['pH'] + '</td>';
+                    row += '<td>' + item['Ammonia'] + '</td>';
+                    row += '<td>' + item['DO'] + '</td>';
+                    row += '<td>' + item['Nitrate'] + '</td>';
+                    row += '<td>' + item['Phosphate'] + '</td>';
+                    row += '<td>' + item['wqi'] + '</td>';
+                    row += '<td>' + item['wqc'] + '</td>';
+                    row += '</tr>';
+                    dataTable.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+
+
+        //----------------------year and month filter
+
+        // Function to filter the data based on the selected year and month
+        // Initialize the filteredData array
+        let filteredData = [];
+
+        function filterData() {
+            try {
+                console.log("Filtering data...");
+                const selectedYear = parseInt(document.getElementById('yearDropdown').value, 10); // Convert to numeric
+                const selectedMonth = document.getElementById('monthDropdown').value.trim(); // Trim extra spaces
+                const selectedBarangay = document.getElementById('barangayDropdown').value; // Get the selected Barangay
+                console.log(selectedMonth);
+
+                // Update the filteredData variable with the filtered data
+                filteredData = dataArray.filter(item => {
+                    const dataMonth = item['Month'].trim(); // Trim extra spaces from the data
+
+                    if (selectedYear && selectedMonth && selectedBarangay) {
+                        return item['Year'] === selectedYear && dataMonth === selectedMonth && item['Barangay'] === selectedBarangay;
+                    }
+                    if (selectedYear && selectedMonth) {
+                        return item['Year'] === selectedYear && dataMonth === selectedMonth;
+                    }
+                    if (selectedYear && selectedBarangay) {
+                        return item['Year'] === selectedYear && item['Barangay'] === selectedBarangay;
+                    }
+                    if (selectedMonth && selectedBarangay) {
+                        return dataMonth === selectedMonth && item['Barangay'] === selectedBarangay;
+                    }
+                    if (selectedYear) {
+                        return item['Year'] === selectedYear;
+                    }
+                    if (selectedMonth) {
+                        return dataMonth === selectedMonth;
+                    }
+                    if (selectedBarangay) {
+                        return item['Barangay'] === selectedBarangay;
+                    }
+                    return true;
+                });
+
+                console.log("Filtered Data Array:");
+                console.log(filteredData);
+
+                // Call the function to populate the table with filtered data
+                populateDataTable(filteredData);
+            } catch (error) {
+                console.error('Error in filterData:', error);
+            }
+        }
+
+
+
+    </script>
+    <!-- Include toastr JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--JS for Tables-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+            function openSaveToDatabaseModal() {
+                var myModal = new bootstrap.Modal(document.getElementById('save_to_database'));
+                myModal.show();
+            }
+        </script>
+    <script>
+        $(document).ready(function () {
+            $('.sub-btn').click(function () {
+                $(this).next('.sub-menu').slideToggle();
+                $(this).find('.dropdown').toggleClass('rotate');
+            });
+        })
+    </script>
+
+    <script>
+        function openSaveToDatabaseModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('save_to_database'));
+            myModal.show();
+        }
+    </script>
+
+    <script>
+        function updateModalButtonClick(id, stationid, barangay, month, year, pH, ammonia, DO, nitrate, phosphate) {
+            // Assign values to input fields in the modal
+            document.getElementById('update_id1').value = id;
+          
+            document.getElementsByName('updatestation_id')[0].value = stationid;
+            document.getElementsByName('updatestation_name')[0].value = barangay;
+            console.log(barangay);
+            var updateStationSelect = document.querySelector('select[name="updatestation_name"]');
+
+// Loop through the options and find the one with the matching text
+for (var i = 0; i < updateStationSelect.options.length; i++) {
+    if (updateStationSelect.options[i].text === barangay) {
+        // Set the selected property of the option to true
+        updateStationSelect.options[i].selected = true;
+        // Exit the loop since we found the matching option
+        break;
+    }
+}
+
+            document.getElementsByName('updateMonth')[0].value = month;
+            // Find the select element by its name attribute
+            var updateMonthSelect = document.querySelector('select[name="updateMonth"]');
+
+            // Loop through the options and find the one with the matching text
+            for (var i = 0; i < updateMonthSelect.options.length; i++) {
+                if (updateMonthSelect.options[i].text === month) {
+                    // Set the selected property of the option to true
+                    updateMonthSelect.options[i].selected = true;
+                    // Exit the loop since we found the matching option
+                    break;
+                }
+}
+            document.getElementsByName('updateyear')[0].value = year;
+            document.getElementsByName('updatedo')[0].value = DO;
+            document.getElementsByName('updateph')[0].value = pH;
+            document.getElementsByName('updatephosphate')[0].value = phosphate;
+            console.log(phosphate);
+            document.getElementsByName('updateammonia')[0].value = ammonia;
+            document.getElementsByName('updatenitrate')[0].value = nitrate;
+
+            // Show the update modal
+            $('#update_data').modal('show');
+        }
+
+    </script>
+<script>
+    function redirectToChartsDAO() {
+        // Redirect the user to the /charts_dao route
+        window.location.href = "charts_dao";//"/generate_excel";
+    }
+</script>
+
+
+</body>
+
+</html>

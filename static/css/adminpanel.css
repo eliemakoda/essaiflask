@@ -1,0 +1,519 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+
+:root {
+    --primary: #0d6efd;
+    --success: #0f8000;
+    --dark: #21252f;
+    --body: #888;
+    --box-shadow: 0 8px 22px rgba(0,0,0,0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Sora, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: white;
+    color: white;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.side-bar {
+    background: #001c50;
+    width: 300px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    overflow-y: auto;
+    transition: 0.6s ease;
+    transition-property: left;
+}
+
+header {
+    background: #fff;
+}
+
+header img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin: 15px;
+    margin-left: 95px;
+    border-radius: 50%;
+    border: 3px solid #b4b8b9;
+}
+
+.close-btn {
+    position: absolute;
+    color: #fff;
+    font-size: 23px;
+    right: 0px;
+    margin: 15px;
+    cursor: pointer;
+}
+
+header h1 {
+    text-align: center;
+    font-weight: 500;
+    font-size: 25px;
+    padding-bottom: 13px;
+    font-family: sans-serif;
+    letter-spacing: 2px;
+}
+
+.menu-2 {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.menu-2 .item {
+    position: relative;
+    cursor: pointer;
+}
+
+.menu-2 .item:hover {
+    background-color: #00379c;
+}
+
+.menu-2 .item a {
+    color: #fff;
+    font: 16px;
+    text-decoration: none;
+    display: block;
+    padding: 3px 30px;
+    line-height: 40px;
+}
+
+.item i {
+    margin-right: 15px;
+}
+
+.item a .dropdown1 {
+    position: absolute;
+    right: 0;
+    margin: 10px;
+    transition: 0.3s ease;
+}
+
+.item .sub-menu {
+    background: #00379c;
+    display: none;
+    line-height: 40px;
+}
+
+.item .sub-menu .sub-item:hover {
+    background-color: #001c50;
+}
+
+.menu-btn {
+    position: absolute;
+    color: rgb(0, 0, 0);
+    font-size: 35px;
+    cursor: pointer;
+    margin: 25px;
+}
+
+.side-bar::-webkit-scrollbar {
+    width: 0px;
+}
+
+.item .sub-menu {
+    padding-left: 30px;
+}
+
+.rotate {
+    transform: rotate(90deg);
+}
+
+/* Admin Panel Content */
+
+#interface {
+    width: calc(100% - 300px);
+    margin-left: 300px;
+    position: relative;
+}
+
+#interface .navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #001c50;
+    padding: 15px 30px;
+    border-bottom: 3px solid #fff;
+    position: fixed;
+    width: calc(100% - 300px);
+}
+
+#interface .navigation .profile {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#interface .navigation .profile i {
+    margin-right: 20px;
+    font-size: 19px;
+    font-weight: 400;
+}
+
+#interface .navigation .taal-logo img {
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.n1 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#menu-btn {
+    display: none;
+    color: #2b2b2b;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.i-name {
+    text-align: center;
+    color: #001c50;
+    padding: 30px 30px 0 30px;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 60px;
+}
+
+/* CSS Chart */
+
+.dropdown {
+    min-width: 5em;
+    position: relative;
+    margin: 1em;
+}
+
+.dropdown * {
+    box-sizing: border-box;
+}
+
+.select {
+    background: #2a2f3b;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px #2a2f3b solid;
+    border-radius: 0.5em;
+    padding: 1em;
+    cursor: pointer;
+    transition: background 0.3s; 
+}
+
+.select-cliked {
+    border: 2px #26489a solid;
+    box-shadow: 0 0 0.8em #26489a;
+}
+
+.select:hover {
+    background: #323741;
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #fff;
+    transition: 0.3s;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 0.2em 0.5em;
+    background: #323741;
+    border: 1px #363a43 solid;
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+    border-radius: 0.5em;
+    color: #9fa5b5;
+    position: absolute;
+    top: 3em;
+    left: 50%;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    display: none;
+    transition: 0.2s;
+    z-index: 1;
+}
+
+.menu li {
+    padding: 0.7em 0.5em;
+    margin: 0.3em 0;
+    border-radius: 0.5em;
+    cursor: pointer;
+}
+
+.menu li:hover {
+    background: #2a2d35;
+}
+
+.active {
+    background: #2a2d35;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+.chart {
+    min-height: 700px;
+    padding: 2rem;
+    border: 1px solid #f49131;
+    border-radius: 1rem;
+    background: #251c35;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+.responsive-chart {
+    width: 100%; /* Makes the chart fill its container's width */
+    height: auto; /* Allows the chart's height to adjust proportionally to its width */
+    min-height: 650px;
+}
+
+
+.values {
+    padding: 30px 30px 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.values .val-box {
+    background: #fff;
+    width: 350px;
+    max-width: 350px;
+    padding: 16px 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+
+.values .val-box i {
+    font-size: 25px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    background: #fff;
+    margin-right: 15px;
+}
+
+.values .val-box:nth-child(1) i {
+    background: #7B74EC;
+}
+
+.values .val-box:nth-child(2) i {
+    background: #5c8af0;
+}
+.values .val-box:nth-child(3) i {
+    background: #e45d99;
+}
+.values .val-box:nth-child(4) i {
+    background: #74daec;
+}
+
+.values .val-box h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.values .val-box span {
+    font-size: 15px;
+    color: #828997;
+}
+
+.board {
+    width: 96%;
+    margin: 30px 0 30px 30px;
+    overflow: auto;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.board img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: px;
+}
+
+.board h5 {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.board p {
+    font-weight: 400;
+    font-size: 13px;
+    color: #787d8d;
+}
+
+.board .n2 {
+    display: flex;
+    align-items: center;
+    padding: 15px 15px 15px 15px;
+}
+
+.board .search {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 14px;
+    border: 1px solid #d7dbe6;
+    border-radius: 4px;
+}
+
+.board .search i {
+    margin-right: 14px;
+}
+
+.board .search input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.board .btn {
+    border: 1px solid #d7dbe6;
+    border-radius: 4px;
+    background-color: #001c50;
+}
+
+.board .btn:hover {
+    background-color: #003caa;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+tr {
+    border-bottom: 1px solid #eef0f3;
+}
+
+thead td {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 400;
+    background: #001c50;
+    padding: 10px;
+    text-align: center;
+    font-weight: 800;
+    border: solid #001c50;
+}
+
+tbody tr td {
+    padding: 10px 15px;
+    border: solid #001c50;
+}
+
+.edit {
+    text-decoration: none;
+    font-size: 14px;
+    font-size: #554cd1;
+    font-weight: 600;
+}
+
+@media (max-width: 769px) {
+    .side-bar {
+        width: 300px;
+        position: fixed;
+        left: -300px;
+        transition: 0.3s ease;
+    }
+
+    .side-bar.active {
+        left: 0;
+    }
+
+    #interface {
+        width: 100%;
+        margin-left: 0px;
+        display: inline-block;
+        transition: 0.3s ease;
+    }
+
+    #menu.active~#interface {
+        width: calc(100% - 270px);
+        margin-left: 270px;
+        transition: 0.3s ease;
+    }
+
+    #interface .navigation {
+        width: 100%;
+    }
+
+    .values {
+        padding: 30px 30px 0 30px;
+        justify-content: flex-start;
+    }
+
+    .values .val-box {
+        width: 100%;
+        max-width: 100%;
+        padding: 16px 20px;
+        margin: 10px 20px 10px 0;
+    }
+
+    .board {
+        width: 92%;
+        padding: 0;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 447px) {
+    #interface .navigation {
+        padding: 15px;
+    }
+
+    .i-name {
+        padding: 30px 15px 0 15px;
+    }
+
+    .values {
+        padding: 15px 15px 0 15px;
+    }
+
+    .values .val-box {
+        width: 100%;
+        margin: 8px 0;
+    }
+
+    .board {
+        margin: 30px 15px 30px 15px;
+    }
+
+}
